@@ -37,7 +37,7 @@ function _wiener_with_blur(Y::AbstractArray, # Fourier transform of the input
     @assert size(Y) == size(S) == size(N) == size(H)
     # With blurring, the filter is:
     #   H* / (|H|² + |N/S|²)
-    return real(ifft(Y .* conj(H) ./ (abs2(H) .+ N ./ S .+ 1e-40 )))
+    return real(ifft(Y .* conj(H) ./ (abs2(H) .+ N ./(S .+ 1e-40) .+ 1e-40 )))
 end
 
 ### User interface
