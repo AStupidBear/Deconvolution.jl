@@ -1,4 +1,4 @@
-### wiener.jl ---  Wiener deconvolution
+ ### wiener.jl ---  Wiener deconvolution
 #
 # Copyright (C) 2016 Mosè Giordano.
 #
@@ -27,7 +27,7 @@ function _wiener_no_blur(Y::AbstractArray, # Fourier transform of the input
     @assert size(Y) == size(S) == size(N)
     # Without blurring, the filter is:
     #   |S|² / (|S|² + |N|²)
-    return real(ifft(Y .* S ./ (S .+ N)))
+    return real(ifft(Y .* S ./ (S .+ N .+ 1e-40)))
 end
 
 function _wiener_with_blur(Y::AbstractArray, # Fourier transform of the input
@@ -37,7 +37,7 @@ function _wiener_with_blur(Y::AbstractArray, # Fourier transform of the input
     @assert size(Y) == size(S) == size(N) == size(H)
     # With blurring, the filter is:
     #   H* / (|H|² + |N/S|²)
-    return real(ifft(Y .* conj(H) ./ (abs2(H) .+ N ./ S)))
+    return real(ifft(Y .* conj(H) ./ (abs2(H) .+ N ./ S .+ 1e-40 )))
 end
 
 ### User interface
